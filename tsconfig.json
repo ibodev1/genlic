@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "rootDir": "src/",
+    "outDir": "bin/",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "inquirer": ["./node_modules/inquirer"]
+    },
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "src/@types/**/*.ts"]
+}

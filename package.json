@@ -1,0 +1,54 @@
+{
+  "name": "genlic",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "bin/cli.js",
+  "directories": {
+    "lib": "bin/"
+  },
+  "bin": "./bin/cli.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "inquirer": "^9.1.4",
+    "node-fetch": "^3.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/register": "^7.21.0",
+    "@types/inquirer": "^9.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "eslint": "^8.35.0",
+    "typescript": "^4.9.5",
+    "xo": "^0.53.1"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "yarn build && xo",
+    "test:fix": "xo --fix",
+    "postversion": "yarn build && git push origin main --tags && yarn publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ibodev1/genlic.git"
+  },
+  "homepage": "https://github.com/ibodev1/genlic#readme",
+  "bugs": {
+    "url": "https://github.com/ibodev1/genlic/issues"
+  },
+  "keywords": [
+    "license",
+    "mit",
+    "license generator",
+    "generate license"
+  ],
+  "author": "İbrahim Ödev <ibrahimodev42@gmail.com>",
+  "description": "Helper cli to generate LICENSE file to your local project."
+}
