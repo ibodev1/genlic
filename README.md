@@ -1,6 +1,9 @@
 # ```Gen```erate ```Lic```ense (genlic)
 > Helper cli to generate LICENSE file to your local project.
 
+[![npm version](https://badge.fury.io/js/genlic.svg)](https://badge.fury.io/js/genlic)
+![NPM](https://img.shields.io/npm/l/genlic)
+
 # Installation
 [Node.js](https://nodejs.org) Make sure you have version 14+ installed. Then run the following:
 
