@@ -5,7 +5,7 @@ import process from 'node:process';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import fetch from 'node-fetch';
-interface License {
+export interface License {
   key: string;
   name: string;
   spdx_id: string;
