@@ -100,31 +100,63 @@ var getGithubDetails = function (userName) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
+var makeBody = function (body, name) { return __awaiter(void 0, void 0, void 0, function () {
+    var year, replaceList, _i, replaceList_1, rule, _a, _b, match, regex;
+    return __generator(this, function (_c) {
+        try {
+            year = new Date().getFullYear();
+            replaceList = [
+                {
+                    matches: [/\[year\]/, /\[yyyy\]/, /<year>/],
+                    replace: year.toString(),
+                },
+                {
+                    matches: [/\[fullname\]/, /\[name of copyright owner\]/, /<name of author>/],
+                    replace: name,
+                }
+            ];
+            for (_i = 0, replaceList_1 = replaceList; _i < replaceList_1.length; _i++) {
+                rule = replaceList_1[_i];
+                for (_a = 0, _b = rule.matches; _a < _b.length; _a++) {
+                    match = _b[_a];
+                    regex = new RegExp(match, 'g');
+                    body = body.replace(regex, rule.replace);
+                }
+            }
+            return [2 /*return*/, body];
+        }
+        catch (error) {
+            throw new Error(chalk.red(error));
+        }
+        return [2 /*return*/];
+    });
+}); };
 var createLicenseFile = function (license, userName) { return __awaiter(void 0, void 0, void 0, function () {
-    var licenseDetails, year, githubDetails, licenseBody, error_3;
+    var licenseDetails, githubDetails, licenseBody, error_3;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 4, , 5]);
+                _b.trys.push([0, 5, , 6]);
                 return [4 /*yield*/, fetch(license.url).then(function (res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
                         return [2 /*return*/, res.json()];
                     }); }); })];
             case 1:
                 licenseDetails = _b.sent();
-                year = new Date().getFullYear();
                 return [4 /*yield*/, getGithubDetails(userName)];
             case 2:
                 githubDetails = _b.sent();
-                licenseBody = licenseDetails === null || licenseDetails === void 0 ? void 0 : licenseDetails.body.replace('[year]', year).replace('[fullname]', (_a = githubDetails === null || githubDetails === void 0 ? void 0 : githubDetails.name) !== null && _a !== void 0 ? _a : userName);
-                return [4 /*yield*/, fs.writeFile(path.join(process.cwd(), 'LICENSE'), licenseBody)];
+                return [4 /*yield*/, makeBody(licenseDetails === null || licenseDetails === void 0 ? void 0 : licenseDetails.body, (_a = githubDetails === null || githubDetails === void 0 ? void 0 : githubDetails.name) !== null && _a !== void 0 ? _a : userName)];
             case 3:
+                licenseBody = _b.sent();
+                return [4 /*yield*/, fs.writeFile(path.join(process.cwd(), 'LICENSE'), licenseBody)];
+            case 4:
                 _b.sent();
                 return [2 /*return*/, licenseDetails];
-            case 4:
+            case 5:
                 error_3 = _b.sent();
                 throw new Error(chalk.red(error_3));
-            case 5: return [2 /*return*/];
+            case 6: return [2 /*return*/];
         }
     });
 }); };

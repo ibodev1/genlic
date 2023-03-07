@@ -5,6 +5,7 @@ import process from 'node:process';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import fetch from 'node-fetch';
+import { Body } from 'node-fetch';
 export interface License {
   key: string;
   name: string;
@@ -48,12 +49,36 @@ const getGithubDetails = async (userName: string) => {
   }
 };
 
+const makeBody = async (body: string, name: string): Promise<string> => {
+  try {
+    const year = new Date().getFullYear();
+    const replaceList = [
+      {
+        matches: [/\[year\]/, /\[yyyy\]/, /<year>/],
+        replace: year.toString(),
+      },
+      {
+        matches: [/\[fullname\]/, /\[name of copyright owner\]/, /<name of author>/],
+        replace: name,
+      }
+    ];
+    for (const rule of replaceList) {
+      for (const match of rule.matches) {
+        const regex = new RegExp(match, 'g');
+        body = body.replace(regex, rule.replace);
+      }
+    }
+    return body;
+  } catch (error) {
+    throw new Error(chalk.red(error));
+  }
+}
+
 const createLicenseFile = async (license: License, userName: string) => {
   try {
     const licenseDetails: any | unknown = await fetch(license.url).then(async res => res.json());
-    const year = new Date().getFullYear();
     const githubDetails = await getGithubDetails(userName);
-    const licenseBody = licenseDetails?.body.replace('[year]', year).replace('[fullname]', githubDetails?.name ?? userName);
+    const licenseBody = await makeBody(licenseDetails?.body, githubDetails?.name ?? userName);
     await fs.writeFile(path.join(process.cwd(), 'LICENSE'), licenseBody);
     return licenseDetails;
   } catch (error) {
