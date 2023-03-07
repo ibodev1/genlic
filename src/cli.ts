@@ -55,6 +55,7 @@ const createLicenseFile = async (license: License, userName: string) => {
     const githubDetails = await getGithubDetails(userName);
     const licenseBody = licenseDetails?.body.replace('[year]', year).replace('[fullname]', githubDetails?.name ?? userName);
     await fs.writeFile(path.join(process.cwd(), 'LICENSE'), licenseBody);
+    return licenseDetails;
   } catch (error) {
     throw new Error(chalk.red(error));
   }
@@ -76,6 +77,15 @@ const writePackageJson = async (license: License) => {
     }
   }
 };
+
+const infoMessage = (licenseDetails: any) => {
+  const messageTemplate = `
+${chalk.green(">")} ${chalk.bold(chalk.white(licenseDetails.name))} - [${chalk.bold(chalk.red(licenseDetails.spdx_id))}]
+${chalk.green(">")} ${chalk.gray(licenseDetails.description)}
+${chalk.green(">")} ${chalk.green(licenseDetails.html_url)}
+  `;
+  console.log(messageTemplate);
+}
 
 (async () => {
   try {
@@ -109,10 +119,11 @@ const writePackageJson = async (license: License) => {
       spdx_id: '',
       url: '',
     };
-    await createLicenseFile(license, answers.githubUserName);
+    const licenseDetails = await createLicenseFile(license, answers.githubUserName);
     if (answers.packageJson) {
       await writePackageJson(license);
     }
+    infoMessage(licenseDetails);
   } catch (error: any) {
     const error_ = error.isTtyError ? new Error(chalk.red('isTtyError')) : new Error(chalk.red(error));
     throw error_;

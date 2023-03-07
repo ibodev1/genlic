@@ -120,7 +120,7 @@ var createLicenseFile = function (license, userName) { return __awaiter(void 0, 
                 return [4 /*yield*/, fs.writeFile(path.join(process.cwd(), 'LICENSE'), licenseBody)];
             case 3:
                 _b.sent();
-                return [3 /*break*/, 5];
+                return [2 /*return*/, licenseDetails];
             case 4:
                 error_3 = _b.sent();
                 throw new Error(chalk.red(error_3));
@@ -158,8 +158,12 @@ var writePackageJson = function (license) { return __awaiter(void 0, void 0, voi
         }
     });
 }); };
+var infoMessage = function (licenseDetails) {
+    var messageTemplate = "\n".concat(chalk.green(">"), " ").concat(chalk.bold(chalk.white(licenseDetails.name)), " - [").concat(chalk.bold(chalk.red(licenseDetails.spdx_id)), "]\n").concat(chalk.green(">"), " ").concat(chalk.gray(licenseDetails.description), "\n").concat(chalk.green(">"), " ").concat(chalk.green(licenseDetails.html_url), "\n  ");
+    console.log(messageTemplate);
+};
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var answers, license, error_5, error_;
+    var answers, license, licenseDetails, error_5, error_;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -203,13 +207,15 @@ var writePackageJson = function (license) { return __awaiter(void 0, void 0, voi
                 };
                 return [4 /*yield*/, createLicenseFile(license, answers.githubUserName)];
             case 4:
-                _b.sent();
+                licenseDetails = _b.sent();
                 if (!answers.packageJson) return [3 /*break*/, 6];
                 return [4 /*yield*/, writePackageJson(license)];
             case 5:
                 _b.sent();
                 _b.label = 6;
-            case 6: return [3 /*break*/, 8];
+            case 6:
+                infoMessage(licenseDetails);
+                return [3 /*break*/, 8];
             case 7:
                 error_5 = _b.sent();
                 error_ = error_5.isTtyError ? new Error(chalk.red('isTtyError')) : new Error(chalk.red(error_5));
