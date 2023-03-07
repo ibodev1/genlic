@@ -1,7 +1,7 @@
 {
   "name": "genlic",
   "version": "0.2.0",
-  "license": "LGPL-2.1",
+  "license": "MIT",
   "type": "module",
   "main": "bin/cli.js",
   "directories": {
