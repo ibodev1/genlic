@@ -5,7 +5,13 @@ import process from 'node:process';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import fetch from 'node-fetch';
-import type {License} from './@types/genlic';
+interface License {
+  key: string;
+  name: string;
+  spdx_id: string;
+  url: string;
+  node_id: string;
+}
 
 let licenses: License[] = [];
 const licenseNames: string[] = [];
@@ -35,7 +41,7 @@ const getLicense = async (licenseName: string): Promise<License | undefined> => 
 
 const getGithubDetails = async (userName: string) => {
   try {
-    const githubDetails: any | unknown = await fetch(`https://api.github.com/users/${userName}`).then(async res => res.json());
+    const githubDetails: any | unknown = await fetch(`https://api.github.com/users/${userName}`).then(async (res: any) => res.json());
     return githubDetails;
   } catch (error) {
     throw new Error(chalk.red(error));
@@ -57,7 +63,7 @@ const createLicenseFile = async (license: License, userName: string) => {
 const writePackageJson = async (license: License) => {
   try {
     const packageJsonPath = path.join(process.cwd(), 'package.json');
-    const packageJsonFile = await fs.readFile(packageJsonPath, {encoding: 'utf-8'});
+    const packageJsonFile = await fs.readFile(packageJsonPath, { encoding: 'utf-8' });
     const packageJson = JSON.parse(packageJsonFile);
     packageJson.license = license.spdx_id;
     await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
